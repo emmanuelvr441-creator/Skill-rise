@@ -18,7 +18,7 @@ export default function NewCoursePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [course, setCourse] = useState({
-    title: '', description: '', is_public: true, skill_tags: [], category: 'general'
+    title: '', description: '', is_public: true, skill_tags: []
   })
   const [lessons, setLessons] = useState([
     { title: '', content_type: 'text', content_url: '', content_body: '', order_index: 0 }
@@ -84,7 +84,6 @@ export default function NewCoursePage() {
     )
 
     if (lessonErr) { setError(lessonErr.message); setLoading(false); return }
-
     router.push(`/courses/${newCourse.id}`)
   }
 
@@ -96,9 +95,7 @@ export default function NewCoursePage() {
           <button onClick={() => router.back()} className="text-gray-400 hover:text-gray-700 text-sm">← Volver</button>
           <h1 className="text-xl font-bold text-gray-900">Crear curso</h1>
         </div>
-
         <div className="space-y-6">
-          {/* Info del curso */}
           <div className="card p-6 space-y-4">
             <h2 className="font-semibold text-gray-900">Información del curso</h2>
             <div>
@@ -114,7 +111,7 @@ export default function NewCoursePage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Etiquetas de habilidades</label>
               <div className="flex gap-2 mb-2">
-                <input className="input flex-1" placeholder="Ej: HACCP, BPM, inocuidad..."
+                <input className="input flex-1" placeholder="Ej: HACCP, BPM..."
                   value={tagInput} onChange={e => setTagInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag())} />
                 <button onClick={addTag} className="btn-secondary">Agregar</button>
@@ -123,7 +120,7 @@ export default function NewCoursePage() {
                 {course.skill_tags.map(tag => (
                   <span key={tag} className="inline-flex items-center gap-1 bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full text-xs">
                     {tag}
-                    <button onClick={() => removeTag(tag)} className="hover:text-brand-900">×</button>
+                    <button onClick={() => removeTag(tag)}>×</button>
                   </span>
                 ))}
               </div>
@@ -132,11 +129,10 @@ export default function NewCoursePage() {
               <input type="checkbox" id="is_public" checked={course.is_public}
                 onChange={e => setCourse(c => ({ ...c, is_public: e.target.checked }))}
                 className="w-4 h-4 accent-brand-600" />
-              <label htmlFor="is_public" className="text-sm text-gray-700">Curso público (visible para todos)</label>
+              <label htmlFor="is_public" className="text-sm text-gray-700">Curso público</label>
             </div>
           </div>
 
-          {/* Lecciones */}
           <div className="card p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-gray-900">Lecciones</h2>
@@ -148,7 +144,7 @@ export default function NewCoursePage() {
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-medium text-gray-400">Lección {idx + 1}</span>
                     {lessons.length > 1 && (
-                      <button onClick={() => removeLesson(idx)} className="text-xs text-red-500 hover:text-red-700">Eliminar</button>
+                      <button onClick={() => removeLesson(idx)} className="text-xs text-red-500">Eliminar</button>
                     )}
                   </div>
                   <input className="input" placeholder="Título de la lección *"
@@ -156,33 +152,4 @@ export default function NewCoursePage() {
                   <select className="input" value={lesson.content_type}
                     onChange={e => updateLesson(idx, 'content_type', e.target.value)}>
                     <option value="text">Texto</option>
-                    <option value="video">Video (URL de YouTube)</option>
-                    <option value="pdf">PDF (URL)</option>
-                    <option value="file">Archivo (URL)</option>
-                  </select>
-                  {lesson.content_type === 'text' ? (
-                    <textarea className="input h-28 resize-none" placeholder="Contenido de la lección..."
-                      value={lesson.content_body} onChange={e => updateLesson(idx, 'content_body', e.target.value)} />
-                  ) : (
-                    <input className="input" placeholder={
-                      lesson.content_type === 'video' ? 'https://youtube.com/watch?v=...' :
-                      lesson.content_type === 'pdf' ? 'URL del PDF' : 'URL del archivo'
-                    }
-                      value={lesson.content_url} onChange={e => updateLesson(idx, 'content_url', e.target.value)} />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>}
-
-          <button onClick={handleCreate} disabled={loading}
-            className="w-full btn-primary py-3 text-base disabled:opacity-50">
-            {loading ? 'Creando curso...' : 'Publicar curso'}
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
+                    <option value="video">Video (YouTube)</option>
