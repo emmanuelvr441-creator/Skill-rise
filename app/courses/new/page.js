@@ -153,3 +153,29 @@ export default function NewCoursePage() {
                     onChange={e => updateLesson(idx, 'content_type', e.target.value)}>
                     <option value="text">Texto</option>
                     <option value="video">Video (YouTube)</option>
+                    <option value="pdf">PDF (URL)</option>
+                    <option value="file">Archivo (URL)</option>
+                  </select>
+                  {lesson.content_type === 'text' ? (
+                    <textarea className="input h-28 resize-none" placeholder="Contenido..."
+                      value={lesson.content_body} onChange={e => updateLesson(idx, 'content_body', e.target.value)} />
+                  ) : (
+                    <input className="input" placeholder="URL del contenido"
+                      value={lesson.content_url} onChange={e => updateLesson(idx, 'content_url', e.target.value)} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>}
+
+          <button onClick={handleCreate} disabled={loading}
+            className="w-full btn-primary py-3 text-base disabled:opacity-50">
+            {loading ? 'Creando curso...' : 'Publicar curso'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
